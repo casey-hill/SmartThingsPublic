@@ -3,8 +3,6 @@ metadata {
 	definition (name: "My Garage Door (example)", namespace: "clh41413", author: "Casey Hill") {
 		capability "Contact Sensor"
         capability "Switch"
-        command "on"
-        command "off"
         command "poll"
 	}
 
@@ -46,25 +44,8 @@ def parse(String description) {
     def value = parts.length>1?parts[1].trim():null
     //log.debug value + " is the value of the device"
 
-    //def result = createEvent(name: name, value: value)  //update the individual virtual sensor
-    //sendEvent(name: name, value: value)
-    //sendEvent(name: "mySwitch1", value: "off")
-    //log.info "sendEvent(name: 'mySwitch1', value: 'off')"
-   if(name == "mySwitch1" && value == "off") {
-   	log.info "sendEvent(name:" + name + " , value:" + value + ") if statement"  // this works
-    sendEvent(name: name, value: value, isStateChange: true)
-    //log.info "on"
-     //sendEvent(name: "mySwitch1", value: "on") //-this works
-   }
-   else{
-   log.info "sendEvent(name:" + name + " , value:" + value + ") else statement"  // this works
-   	sendEvent(name: name, value: value, isStateChange: true)
-   }
-   //sendEvent(name: "mySwitch1", value: "on")
-    //log.info "on"
-   //sendEvent(name: "mySwitch1", value: "off") //-this works
-    
-    //return result
+   sendEvent(name: name, value: value, isStateChange: true)
+   
 }
 //TODO: Need to define this on the device itself
 def myPoll() {
