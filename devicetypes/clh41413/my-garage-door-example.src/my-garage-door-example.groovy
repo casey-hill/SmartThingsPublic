@@ -20,13 +20,13 @@ metadata {
 		}
         
          standardTile("mySwitch1", "device.mySwitch1", width: 1, height: 1, canChangeIcon: true, canChangeBackground: true, defaultState: 0) {
-			state "default", label: 'Off', action: "switch.off", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
-            state "on", label: 'On', action: "switch.off", icon: "st.switches.switch.on", backgroundColor: "#79b821"
-			state "off", label: 'Off', action: "switch.on", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+			state "on", label: 'on', action: "switch.off", icon: "st.switches.switch.on", backgroundColor: "#79b821"
+			state "off", label: 'off', action: "switch.on", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+            
 		}
        
 
-		main(["myContact1"])
+		main(["mySwitch1"])
         details(["myContact1","mySwitch1","refresh"])
 }
 
@@ -42,12 +42,29 @@ def parse(String description) {
 
     def parts = msg.split(" ")
     def name  = parts.length>0?parts[0].trim():null
-    log.debug name + " is the name of the device"
+    //log.debug name + " is the name of the device"
     def value = parts.length>1?parts[1].trim():null
-    log.debug value + " is the value of the device"
+    //log.debug value + " is the value of the device"
 
-    def result = createEvent(name: name, value: value)  //update the individual virtual sensor
-    return result
+    //def result = createEvent(name: name, value: value)  //update the individual virtual sensor
+    //sendEvent(name: name, value: value)
+    //sendEvent(name: "mySwitch1", value: "off")
+    //log.info "sendEvent(name: 'mySwitch1', value: 'off')"
+   if(name == "mySwitch1" && value == "off") {
+   	log.info "sendEvent(name:" + name + " , value:" + value + ") if statement"  // this works
+    sendEvent(name: name, value: value, isStateChange: true)
+    //log.info "on"
+     //sendEvent(name: "mySwitch1", value: "on") //-this works
+   }
+   else{
+   log.info "sendEvent(name:" + name + " , value:" + value + ") else statement"  // this works
+   	sendEvent(name: name, value: value, isStateChange: true)
+   }
+   //sendEvent(name: "mySwitch1", value: "on")
+    //log.info "on"
+   //sendEvent(name: "mySwitch1", value: "off") //-this works
+    
+    //return result
 }
 //TODO: Need to define this on the device itself
 def myPoll() {
@@ -57,11 +74,11 @@ def myPoll() {
 
 def on() {
     zigbee.smartShield(text: "SwitchOn").format()
-    //log.debug "on was set"
-    //zigbee.smartShield(text: "zone2On").format()
 }
 
+/*
 def off() {
-	zigbee.smartShield(text: "SwitchOn").format()
+	//sendEvent(name: "mySwitch1", value: "off")
+	//zigbee.smartShield(text: "SwitchOn").format()
     //zigbee.smartShield(text: "zone2Off").format()
-}
+}*/
